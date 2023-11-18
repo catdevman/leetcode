@@ -1,0 +1,30 @@
+{
+  "Comment": "A state machine to valid and solve sudokus",
+  "StartAt": "Validate Sudoku",
+  "States": {
+    "Validate Sudoku": {
+      "Type": "Task",
+      "Resource": "${ValidSudokuFunctionArn}",
+      "Next": "Valid"
+    },
+        "Valid": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.valid",
+          "BooleanEquals": true,
+          "Next": "Solve Sudoku"
+        }
+      ],
+      "Default": "Failure"
+    },
+    "Failure": {
+      "Type": "Fail"
+    },
+    "Solve Sudoku": {
+      "Type": "Task",
+      "Resource": "${SudokuSolverFunctionArn}",
+      "End": true
+    }
+  }
+}

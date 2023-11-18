@@ -8,6 +8,18 @@ Globals:
     Timeout: 5
 
 Resources:
+  SolveSudokuStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      DefinitionUri: statemachine/sudoku-solver.asl.json
+      DefinitionSubstitutions:
+        ValidSudokuFunctionArn: !GetAtt ValidSudokuFunction.Arn
+        SudokuSolverFunctionArn: !GetAtt SudokuSolverFunction.Arn
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref ValidSudokuFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SudokuSolverFunction
 
   ValidSudokuFunction:
     Type: AWS::Serverless::Function
